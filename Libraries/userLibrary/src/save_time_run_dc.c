@@ -7,16 +7,16 @@ uint32_t startAddressTimeRelay1 = 0x800F400; // start address to write new passw
 
 void save_time (uint8_t time)
 {
-			FLASH_Unlock();  //unlock flash writing
-			FLASH_ErasePage(startAddress);
-
-			writeFlash(0, time, startAddress);									                
-			_delay_ms(200);
-
-			FLASH_Lock();   //lock the flash for writing
+	FLASH_Unlock();  //unlock flash writing
+	FLASH_ErasePage(startAddress);
+	
+	writeFlash(0, time, startAddress);									                
+	_delay_ms(200);
+	
+	FLASH_Lock();   //lock the flash for writing
 }
 
 char get_time(void)
 {
-		  return (readFlash(0, startAddress));
+	return (readFlash(0, startAddress));
 }
