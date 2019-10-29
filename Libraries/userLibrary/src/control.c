@@ -174,27 +174,27 @@ void fill_water(void)
 
 void time_dc_run_setup (uint8_t *count, uint8_t max_val)
 {
-		if (GPIO_ReadInputDataBit(KEYBOARD_PORT, UP_PIN) == 0) {
-				_delay_ms(200); 
-				(*count)++;
-		}
-		else if(GPIO_ReadInputDataBit(KEYBOARD_PORT, DOWN_PIN) == 0) {
-				_delay_ms(200);
-			  (*count)--;
-		}
-	  printf("\n %d", *count);
-		if(*count <= 0) 
-				*count = 99;	
-		else if(*count >= max_val) 
-				*count = 0;
-		disable_text = 2;
-	  hc595_display_integer_numbers((*count));
-	  if (GPIO_ReadInputDataBit(KEYBOARD_PORT, ENTER_PIN) == 0) {
-				_delay_ms(200);
-				system_state = RUNMOTOR;
-				save_time(*count);
-				printf("\n Run ");
-		}
+	if (GPIO_ReadInputDataBit(KEYBOARD_PORT, UP_PIN) == 0) {
+		_delay_ms(200); 
+			(*count)++;
+	}
+	else if(GPIO_ReadInputDataBit(KEYBOARD_PORT, DOWN_PIN) == 0) {
+		_delay_ms(200);
+		(*count)--;
+	}
+	printf("\n %d", *count);
+	if(*count <= 0) 
+		*count = 99;	
+	else if(*count >= max_val) 
+		*count = 0;
+	disable_text = 2;
+	hc595_display_integer_numbers((*count));
+	if (GPIO_ReadInputDataBit(KEYBOARD_PORT, ENTER_PIN) == 0) {
+		_delay_ms(200);
+		system_state = RUNMOTOR;
+		save_time(*count);
+		printf("\n Run ");
+	}
 }
 
 /*
@@ -204,20 +204,20 @@ void time_dc_run_setup (uint8_t *count, uint8_t max_val)
 */
 void running_dc(uint32_t time_on)
 {
-	  if (time_on > 0) { 
-			hc595_display_integer_numbers(((time_on / 60) + 1));
+	if (time_on > 0) { 
+		hc595_display_integer_numbers(((time_on / 60) + 1));
 //				if (time_on < 60)
 //						 hc595_display_integer_numbers(time_on);
 //				else 
-				
-			turn_on(DC);
-		}
-		else {
-			  disable_text = 0;
-			  turn_off(DC);
-				system_state = NUTRIENT;
-			  _delay_ms(3000);
-		}
+			
+		turn_on(DC);
+	}
+	else {
+		disable_text = 0;
+		turn_off(DC);
+			system_state = NUTRIENT;
+		_delay_ms(3000);
+	}
 }
 /*
 * Brief		 : Watering nutrients for plants
@@ -227,20 +227,20 @@ void running_dc(uint32_t time_on)
 
 void pour_nutrient(void)
 {
-			turn_on(VAN2);
-			turn_on(BOM1);
-			printf(" %d", time_check);
-			if (GPIO_ReadInputDataBit(WATER_PORT, W_LEVEL_A) == 1) {
-					_delay_ms(1);
-				  if (time_check <=0) {
-							turn_off(VAN2);
-							turn_off(BOM1);
-							system_state = WATER;
-					}
+	turn_on(VAN2);
+	turn_on(BOM1);
+	printf(" %d", time_check);
+	if (GPIO_ReadInputDataBit(WATER_PORT, W_LEVEL_A) == 1) {
+			_delay_ms(1);
+		if (time_check <=0) {
+					turn_off(VAN2);
+					turn_off(BOM1);
+					system_state = WATER;
 			}
-			else {
-					time_check = TIME_CHECK;
-			}
+	}
+	else {
+			time_check = TIME_CHECK;
+	}
 }
 /*
 * Brief		 : System working in Auto mode when switch in "auto"  _______auto     off    manual_____
@@ -254,40 +254,40 @@ void pour_nutrient(void)
 */
 void auto_mode (uint8_t *time)
 {
-		switch (system_state) {
-			case IDEAL_STATE: {
-					//printf("\n IDEAL");
-					ideal_state();
-					break;
-			}
-			case TIMESET: {
-					//printf("\n TIMESET");
-					time_dc_run_setup(time, MAX_TIME);
-					time_run = (*time) * 60;
-					break;
-			}
-			case FILL_WATER: {
-					//printf("\n FILL_WATER");
-					fill_water();
-					break;
-			}
-			case RUNMOTOR: {
-					//printf("\n RUNMOTOR");
-					running_dc(time_run);
-					break;
-			}
-			case NUTRIENT: {
-					//printf("\n NUTRIENT");
-					pour_nutrient();
-					break;
-			}
-			default: {
-					//printf("\n AUTO");
-					auto_pour_water();
-					break;
-			}
-			
+	switch (system_state) {
+		case IDEAL_STATE: {
+				//printf("\n IDEAL");
+				ideal_state();
+				break;
 		}
+		case TIMESET: {
+				//printf("\n TIMESET");
+				time_dc_run_setup(time, MAX_TIME);
+				time_run = (*time) * 60;
+				break;
+		}
+		case FILL_WATER: {
+				//printf("\n FILL_WATER");
+				fill_water();
+				break;
+		}
+		case RUNMOTOR: {
+				//printf("\n RUNMOTOR");
+				running_dc(time_run);
+				break;
+		}
+		case NUTRIENT: {
+				//printf("\n NUTRIENT");
+				pour_nutrient();
+				break;
+		}
+		default: {
+				//printf("\n AUTO");
+				auto_pour_water();
+				break;
+		}
+		
+	}
 }
 
 /*
@@ -317,28 +317,28 @@ void system_stop(void)
 */
 void manual_mode(void)
 {
-		if (GPIO_ReadInputDataBit(M_VAN1_PORT, M_VAN1_PIN) == 0) 
-				turn_on(VAN1);
-		else 
-			  turn_off(VAN1);
-		
-		if (GPIO_ReadInputDataBit(M_VAN2_PORT, M_VAN2_PIN) == 0) 
-				turn_on(VAN2);
-		else 
-			  turn_off(VAN2);
-		
-		if (GPIO_ReadInputDataBit(M_BOM1_PORT, M_BOM1_PIN) == 0) 
-				turn_on(BOM1);
-		else 
-			  turn_off(BOM1);
-		
-		if (GPIO_ReadInputDataBit(M_BOM2_PORT, M_BOM2_PIN) == 0) 
-				turn_on(BOM2);
-		else 
-			  turn_off(BOM2);
-		
-		if (GPIO_ReadInputDataBit(M_DC_PORT, M_DC_PIN) == 0) 
-				turn_on(DC);
-		else 
-			  turn_off(DC);	
+	if (GPIO_ReadInputDataBit(M_VAN1_PORT, M_VAN1_PIN) == 0) 
+			turn_on(VAN1);
+	else 
+		turn_off(VAN1);
+	
+	if (GPIO_ReadInputDataBit(M_VAN2_PORT, M_VAN2_PIN) == 0) 
+			turn_on(VAN2);
+	else 
+		turn_off(VAN2);
+	
+	if (GPIO_ReadInputDataBit(M_BOM1_PORT, M_BOM1_PIN) == 0) 
+			turn_on(BOM1);
+	else 
+		turn_off(BOM1);
+	
+	if (GPIO_ReadInputDataBit(M_BOM2_PORT, M_BOM2_PIN) == 0) 
+			turn_on(BOM2);
+	else 
+		turn_off(BOM2);
+	
+	if (GPIO_ReadInputDataBit(M_DC_PORT, M_DC_PIN) == 0) 
+			turn_on(DC);
+	else 
+		turn_off(DC);	
 }
