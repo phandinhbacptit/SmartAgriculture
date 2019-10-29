@@ -1,0 +1,28 @@
+--cpu Cortex-M3
+".\objects\main.o"
+".\objects\stm32f10x_it.o"
+".\objects\core_cm3.o"
+".\objects\system_stm32f10x.o"
+".\objects\misc.o"
+".\objects\stm32f10x_gpio.o"
+".\objects\stm32f10x_tim.o"
+".\objects\stm32f10x_usart.o"
+".\objects\stm32f10x_rcc.o"
+".\objects\stm32f10x_dbgmcu.o"
+".\objects\stm32f10x_sdio.o"
+".\objects\stm32f10x_exti.o"
+".\objects\stm32f10x_iwdg.o"
+".\objects\stm32f10x_flash.o"
+".\objects\stm32_usart.o"
+".\objects\stm32_io.o"
+".\objects\stm32_delay.o"
+".\objects\stm32_timer.o"
+".\objects\control.o"
+".\objects\74hc595.o"
+".\objects\save_time_run_dc.o"
+".\objects\stm32f1_my_flash.o"
+".\objects\startup_stm32f10x_md.o"
+--strict --scatter ".\Objects\project.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\project.map" -o .\Objects\project.axf
